@@ -14,7 +14,8 @@ public class TransactionService(AppDbContext db) : ITransactionService
         new TransactionResponse(
             t.Id, t.AccountId, t.Account.Name, t.CategoryId,
             t.Category != null ? t.Category.Name : null,
-            t.Type, t.Amount, t.Date, t.Description, t.CreatedAt);
+            t.Type, t.Amount, t.Date, t.Description, t.CreatedAt,
+            t.TransferId);
 
 public async Task<TransactionResponse?> GetByIdAsync(int userId, int id) =>
     await db.Transactions

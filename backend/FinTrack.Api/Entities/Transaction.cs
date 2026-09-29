@@ -13,4 +13,5 @@ public class Transaction
 
     public Account Account { get; set; } = null!;
     public Category? Category { get; set; }
+    public Guid? TransferId { get; set; }
 }

@@ -53,6 +53,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
          .WithMany()
          .HasForeignKey(t => t.CategoryId)
          .OnDelete(DeleteBehavior.SetNull);
+        e.HasIndex(t => t.TransferId);
     });
 
     modelBuilder.Entity<Category>().HasData(
