@@ -53,5 +53,14 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
          .HasForeignKey(t => t.CategoryId)
          .OnDelete(DeleteBehavior.SetNull);
     });
+
+    modelBuilder.Entity<Category>().HasData(
+    new Category { Id = 1, Name = "Salary", Type = CategoryType.Income },
+    new Category { Id = 2, Name = "Other Income", Type = CategoryType.Income },
+    new Category { Id = 3, Name = "Food", Type = CategoryType.Expense },
+    new Category { Id = 4, Name = "Transport", Type = CategoryType.Expense },
+    new Category { Id = 5, Name = "Bills", Type = CategoryType.Expense },
+    new Category { Id = 6, Name = "Shopping", Type = CategoryType.Expense }
+);
 }
 }
