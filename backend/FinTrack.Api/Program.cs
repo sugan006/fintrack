@@ -44,6 +44,8 @@ builder.Services.AddAuthorization();
 // Application services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Controllers and API docs
 builder.Services.AddControllers()
@@ -51,6 +53,8 @@ builder.Services.AddControllers()
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // HTTP request pipeline
 if (app.Environment.IsDevelopment())
