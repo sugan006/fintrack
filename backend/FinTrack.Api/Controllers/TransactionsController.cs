@@ -11,7 +11,10 @@ namespace FinTrack.Api.Controllers;
 [Route("api/transactions")]
 public class TransactionsController(ITransactionService transactionService) : ControllerBase
 {
-    [HttpGet("{id:int}")]
+[HttpGet]
+public async Task<ActionResult<PagedResult<TransactionResponse>>> GetPaged([FromQuery] TransactionQuery query) =>
+        Ok(await transactionService.GetPagedAsync(User.GetUserId(), query));
+[HttpGet("{id:int}")]
 public async Task<ActionResult<TransactionResponse>> GetById(int id)
 {
     var transaction = await transactionService.GetByIdAsync(User.GetUserId(), id);

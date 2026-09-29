@@ -23,6 +23,44 @@ public async Task<TransactionResponse?> GetByIdAsync(int userId, int id) =>
         .Select(Projection)
         .SingleOrDefaultAsync();
 
+public async Task<PagedResult<TransactionResponse>> GetPagedAsync(int userId, TransactionQuery q)
+{
+    var query = db.Transactions.AsNoTracking().Where(t => t.Account.UserId == userId);
+
+    if (q.AccountId is int accountId)
+        query = query.Where(t => t.AccountId == accountId);
+    if (q.Type is TransactionType type)
+        query = query.Where(t => t.Type == type);
+    if (q.CategoryId is int categoryId)
+        query = query.Where(t => t.CategoryId == categoryId);
+    if (q.From is DateTime from)
+    {
+        var fromDate = from.Date;
+        query = query.Where(t => t.Date >= fromDate);
+    }
+    if (q.To is DateTime to)
+    {
+        var toExclusive = to.Date.AddDays(1); // include the whole "To" day
+        query = query.Where(t => t.Date < toExclusive);
+    }
+    if (!string.IsNullOrWhiteSpace(q.Search))
+    {
+        var search = q.Search.Trim();
+        query = query.Where(t => t.Description != null && t.Description.Contains(search));
+    }
+
+    var totalCount = await query.CountAsync();
+    var items = await query
+        .OrderByDescending(t => t.Date)
+        .ThenByDescending(t => t.Id)
+        .Skip((q.Page - 1) * q.PageSize)
+        .Take(q.PageSize)
+        .Select(Projection)
+        .ToListAsync();
+
+    return new PagedResult<TransactionResponse>(items, q.Page, q.PageSize, totalCount);
+}
+
 public async Task<TransactionResponse> CreateAsync(int userId, CreateTransactionRequest request)
 {
     EnsureIncomeOrExpense(request.Type);
