@@ -30,6 +30,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
          .WithMany(u => u.Accounts)
          .HasForeignKey(a => a.UserId)
          .OnDelete(DeleteBehavior.Cascade);
+        e.Property(a => a.RowVersion).IsRowVersion();
     });
 
     modelBuilder.Entity<Category>(e =>
