@@ -12,4 +12,5 @@ public class Account
 
     public User User { get; set; } = null!;
     public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public byte[] RowVersion { get; set; } = [];
 }
