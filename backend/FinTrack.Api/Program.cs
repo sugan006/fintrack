@@ -69,15 +69,20 @@ var app = builder.Build();
 
 app.UseExceptionHandler();
 
-// HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+// API docs are public so reviewers can try the API
+app.MapOpenApi();
+app.MapScalarApiReference();
+
+// Health check for Elastic Beanstalk
+app.MapGet("/", () => Results.Ok(new { status = "FinTrack API is running" }));
 
 app.UseCors("Frontend");
-app.UseHttpsRedirection();
+
+// On AWS, HTTPS is handled in front of the app, so only redirect locally
+if (!app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
