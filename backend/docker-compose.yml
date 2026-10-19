@@ -1,0 +1,21 @@
+# Local development only: SQL Server + FinTrack API in containers.
+# These passwords and keys are for local testing; never reuse them in AWS.
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "FinTrack_Dev_Pass123!"
+    ports:
+      - "1433:1433"
+
+  api:
+    build: ./FinTrack.Api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=FinTrack;User Id=sa;Password=FinTrack_Dev_Pass123!;TrustServerCertificate=True"
+      Jwt__Key: "local-docker-dev-key-at-least-32-characters-long"
+    depends_on:
+      - db
