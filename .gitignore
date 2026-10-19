@@ -5,6 +5,8 @@
 
 # dotenv files
 .env
+*.zip
+zipforclaude.bat
 
 # User-specific files
 *.rsuser

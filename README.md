@@ -4,7 +4,9 @@ FinTrack is a full-stack personal finance tracker. Users can manage their accoun
 
 The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Framework Core 9** on **SQL Server**. The frontend is being built with **Next.js**, **TypeScript** and **Tailwind CSS**.
 
-> **Status:** The backend API is complete and covered by unit tests. The frontend is in progress (project setup and typed API client are done; pages are being built).
+> **Status:** The backend API is complete, covered by unit tests and deployed on AWS. The frontend is in progress (project setup and typed API client are done; pages are being built).
+
+**Live API docs:** [fintrack-suganjan.ap-south-1.elasticbeanstalk.com/scalar/v1](http://fintrack-suganjan.ap-south-1.elasticbeanstalk.com/scalar/v1). Register a user, copy the token, and try the endpoints.
 
 ## Features
 
@@ -127,6 +129,23 @@ npm run dev
 
 The frontend runs at `http://localhost:3000`, which is the origin the API allows through CORS by default.
 
+## Deployment on AWS
+
+The API runs on AWS in the Asia Pacific (Mumbai) region:
+
+| Part | AWS service |
+|---|---|
+| API container | AWS Elastic Beanstalk, Docker on Amazon Linux 2023, single t3.micro EC2 instance behind nginx |
+| Database | Amazon RDS for SQL Server (Express edition) |
+| Configuration | Connection string and JWT key passed as environment properties, never stored in code |
+| Network security | Security groups: the database accepts connections only from the API server and an admin IP |
+| Logs | Application logs streamed to Amazon CloudWatch Logs |
+| Access | IAM admin user in a group, with MFA; root account not used for daily work |
+
+The image is built from the multi-stage `Dockerfile` in `backend/FinTrack.Api`. EF Core migrations are applied to RDS with `dotnet ef database update`. A health check at `GET /` lets Elastic Beanstalk monitor the app.
+
+**Planned improvements:** HTTPS, secrets in AWS Secrets Manager, and a CI/CD pipeline with GitHub Actions.
+
 ## Running the Tests
 
 ```bash
@@ -147,7 +166,7 @@ The test suite has 10 xUnit tests for the transaction and transfer services. Eac
 
 - [ ] Frontend pages: login and register, accounts, transactions, transfers, dashboard
 - [x] Docker setup for the API (local development with Docker Compose)
-- [ ] Deployment to AWS
+- [x] Deployment to AWS (Elastic Beanstalk + RDS)
 - [ ] CI pipeline with GitHub Actions to run the tests on every push
 
 ## Author
