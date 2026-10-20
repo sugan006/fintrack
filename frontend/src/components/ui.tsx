@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes } from "react";
 
 export function Spinner({ label = "Loading…" }: { label?: string }) {
     return (
@@ -41,10 +41,45 @@ export function Field({ label, error, id, ...inputProps }: FieldProps) {
     );
 }
 
-export function Button({ className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
+interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
+    label: string;
+    error?: string;
+}
+
+export function SelectField({ label, error, id, children, ...selectProps }: SelectFieldProps) {
+    const selectId = id ?? selectProps.name;
+    return (
+        <div className="flex flex-col gap-1">
+            <label htmlFor={selectId} className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                {label}
+            </label>
+            <select
+                id={selectId}
+                aria-invalid={error ? true : undefined}
+                className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 aria-[invalid=true]:border-red-500 dark:border-zinc-700 dark:bg-zinc-900"
+                {...selectProps}
+            >
+                {children}
+            </select>
+            {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
+        </div>
+    );
+}
+
+const BUTTON_STYLES = {
+    primary: "bg-emerald-600 text-white hover:bg-emerald-700",
+    secondary: "border border-zinc-300 text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800",
+    danger: "border border-red-300 text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950",
+};
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: keyof typeof BUTTON_STYLES;
+}
+
+export function Button({ variant = "primary", className = "", ...props }: ButtonProps) {
     return (
         <button
-            className={`rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${BUTTON_STYLES[variant]} ${className}`}
             {...props}
         />
     );
