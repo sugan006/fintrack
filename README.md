@@ -6,7 +6,9 @@ FinTrack is a full-stack personal finance tracker. Users can manage their accoun
 
 The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Framework Core 9** on **SQL Server**. The frontend is built with **Next.js**, **React**, **TypeScript** and **Tailwind CSS**.
 
-> **Status:** The backend API is complete, covered by unit tests and deployed on AWS. The frontend is complete and runs locally against the API.
+> **Status:** Complete. The API runs on AWS and the frontend on Netlify.
+
+**Live app:** [fintrack-suganjan.netlify.app](https://fintrack-suganjan.netlify.app). Create an account and try it.
 
 **Live API docs:** [fintrack-suganjan.ap-south-1.elasticbeanstalk.com/scalar/v1](http://fintrack-suganjan.ap-south-1.elasticbeanstalk.com/scalar/v1). Register a user, copy the token, and try the endpoints.
 
@@ -156,7 +158,9 @@ The frontend runs at `http://localhost:3000`, which is the origin the API allows
 
 Set `NEXT_PUBLIC_API_URL` in `.env.local` to match where the API runs: `http://localhost:5249` with `dotnet run`, or `http://localhost:8080` with Docker Compose. To check a production build, run `npm run build` and then `npm start`.
 
-## Deployment on AWS
+## Deployment
+
+The frontend is hosted on **Netlify** (HTTPS, deployed automatically from `main`). Its `/api/...` requests are forwarded server-side to the API by a Next.js rewrite in `next.config.ts`, so the browser only talks to one site.
 
 The API runs on AWS in the Asia Pacific (Mumbai) region:
 
@@ -197,7 +201,8 @@ The test suite has 10 xUnit tests for the transaction and transfer services. Eac
 - [x] Docker setup for the API (local development with Docker Compose)
 - [x] Deployment to AWS (Elastic Beanstalk + RDS)
 - [x] CI pipeline with GitHub Actions: backend build and tests, Docker image build, frontend lint and build
-- [ ] HTTPS for the API, then deploy the frontend
+- [x] Frontend deployed on Netlify
+- [ ] HTTPS directly on the API
 - [ ] Move secrets to AWS Secrets Manager
 
 ## Author
