@@ -1,5 +1,7 @@
 # FinTrack – Personal Finance Tracker
 
+[![CI](https://github.com/sugan006/fintrack/actions/workflows/ci.yml/badge.svg)](https://github.com/sugan006/fintrack/actions/workflows/ci.yml)
+
 FinTrack is a full-stack personal finance tracker. Users can manage their accounts, record income and expenses, transfer money between accounts, and see a monthly summary of their finances.
 
 The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Framework Core 9** on **SQL Server**. The frontend is built with **Next.js**, **React**, **TypeScript** and **Tailwind CSS**.
@@ -169,7 +171,9 @@ The API runs on AWS in the Asia Pacific (Mumbai) region:
 
 The image is built from the multi-stage `Dockerfile` in `backend/FinTrack.Api`. EF Core migrations are applied to RDS with `dotnet ef database update`. A health check at `GET /` lets Elastic Beanstalk monitor the app.
 
-**Planned improvements:** HTTPS, secrets in AWS Secrets Manager, and a CI/CD pipeline with GitHub Actions.
+**Continuous integration:** every push and pull request runs the backend build and unit tests, builds the Docker image, and lints and builds the frontend with GitHub Actions.
+
+**Planned improvements:** HTTPS, secrets in AWS Secrets Manager, and automatic deployment to Elastic Beanstalk.
 
 ## Running the Tests
 
@@ -192,7 +196,7 @@ The test suite has 10 xUnit tests for the transaction and transfer services. Eac
 - [x] Frontend pages: login and register, accounts, transactions, transfers, dashboard
 - [x] Docker setup for the API (local development with Docker Compose)
 - [x] Deployment to AWS (Elastic Beanstalk + RDS)
-- [ ] CI pipeline with GitHub Actions to run the tests on every push
+- [x] CI pipeline with GitHub Actions: backend build and tests, Docker image build, frontend lint and build
 - [ ] HTTPS for the API, then deploy the frontend
 - [ ] Move secrets to AWS Secrets Manager
 
