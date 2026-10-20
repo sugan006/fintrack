@@ -1,0 +1,9 @@
+# Netlify settings for the Next.js frontend
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = ".next"
+
+# Turns the Next.js build into Netlify pages and functions
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
