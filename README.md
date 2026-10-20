@@ -2,11 +2,25 @@
 
 FinTrack is a full-stack personal finance tracker. Users can manage their accounts, record income and expenses, transfer money between accounts, and see a monthly summary of their finances.
 
-The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Framework Core 9** on **SQL Server**. The frontend is being built with **Next.js**, **TypeScript** and **Tailwind CSS**.
+The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Framework Core 9** on **SQL Server**. The frontend is built with **Next.js**, **React**, **TypeScript** and **Tailwind CSS**.
 
-> **Status:** The backend API is complete, covered by unit tests and deployed on AWS. The frontend is in progress (project setup and typed API client are done; pages are being built).
+> **Status:** The backend API is complete, covered by unit tests and deployed on AWS. The frontend is complete and runs locally against the API.
 
 **Live API docs:** [fintrack-suganjan.ap-south-1.elasticbeanstalk.com/scalar/v1](http://fintrack-suganjan.ap-south-1.elasticbeanstalk.com/scalar/v1). Register a user, copy the token, and try the endpoints.
+
+## Screenshots
+
+| Dashboard | Transactions |
+|---|---|
+| ![Dashboard with monthly summary and spending chart](docs/screenshots/dashboard.png) | ![Transactions with filters and paging](docs/screenshots/transactions.png) |
+
+| Accounts | Transfer |
+|---|---|
+| ![Accounts with balances](docs/screenshots/accounts.png) | ![Transfer between accounts](docs/screenshots/transfer.png) |
+
+| Log in | Create account |
+|---|---|
+| ![Login page](docs/screenshots/login.png) | ![Register page](docs/screenshots/register.png) |
 
 ## Features
 
@@ -18,6 +32,15 @@ The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Fram
 - **Balance integrity:** account balances are updated together with every transaction change, and `RowVersion` optimistic concurrency stops two simultaneous updates from overwriting each other.
 - **Consistent errors:** a global exception handler (`IExceptionHandler`) returns standard `ProblemDetails` responses with the right HTTP status codes.
 
+### Frontend pages
+
+- **Log in and register:** client-side validation that matches the API rules, clear error messages, and a protected area that sends logged-out users to the login page.
+- **Dashboard:** total balance, monthly income, expenses and net, a spending-by-category donut chart, recent transactions, and month-by-month navigation.
+- **Accounts:** cards with balances and the overall total; create, rename and delete (accounts with transactions are protected).
+- **Transactions:** a table with filters for account, type, category, date range and description search, paging, and adding, editing and deleting income and expenses.
+- **Transfer:** move money between accounts with an instant balance check and a list of recent transfers.
+- Responsive layout for phones and tablets, light and dark mode, page titles, a 404 page and an error page.
+
 ## Tech Stack
 
 | Area | Technology |
@@ -27,7 +50,7 @@ The backend is a REST API built with **ASP.NET Core (.NET 9)** and **Entity Fram
 | Security | JWT Bearer authentication, BCrypt password hashing, CORS |
 | API docs | OpenAPI + Scalar |
 | Testing | xUnit, EF Core InMemory provider |
-| Frontend | Next.js, React, TypeScript, Tailwind CSS |
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Recharts |
 
 ## Project Structure
 
@@ -42,7 +65,7 @@ fintrack/
 │   │   ├── Data/          # AppDbContext and migrations
 │   │   └── Common/        # JWT settings, exception handling, paging helpers
 │   └── FinTrack.Tests/    # xUnit tests for the service layer
-├── frontend/              # Next.js + TypeScript app (in progress)
+├── frontend/              # Next.js + TypeScript app
 └── FinTrack.sln
 ```
 
@@ -129,6 +152,8 @@ npm run dev
 
 The frontend runs at `http://localhost:3000`, which is the origin the API allows through CORS by default.
 
+Set `NEXT_PUBLIC_API_URL` in `.env.local` to match where the API runs: `http://localhost:5249` with `dotnet run`, or `http://localhost:8080` with Docker Compose. To check a production build, run `npm run build` and then `npm start`.
+
 ## Deployment on AWS
 
 The API runs on AWS in the Asia Pacific (Mumbai) region:
@@ -164,10 +189,12 @@ The test suite has 10 xUnit tests for the transaction and transfer services. Eac
 
 ## Roadmap
 
-- [ ] Frontend pages: login and register, accounts, transactions, transfers, dashboard
+- [x] Frontend pages: login and register, accounts, transactions, transfers, dashboard
 - [x] Docker setup for the API (local development with Docker Compose)
 - [x] Deployment to AWS (Elastic Beanstalk + RDS)
 - [ ] CI pipeline with GitHub Actions to run the tests on every push
+- [ ] HTTPS for the API, then deploy the frontend
+- [ ] Move secrets to AWS Secrets Manager
 
 ## Author
 
