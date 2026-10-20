@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FinTrack",
+  title: { default: "FinTrack", template: "%s · FinTrack" },
   description: "Personal finance tracker: accounts, transactions, transfers and a monthly dashboard.",
 };
 
