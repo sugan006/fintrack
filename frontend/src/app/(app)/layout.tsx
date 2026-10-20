@@ -35,13 +35,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
                 <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
                     <Link href="/dashboard" className="text-lg font-bold text-emerald-600">FinTrack</Link>
-                    <nav className="flex flex-wrap gap-1">
+                    <nav className="order-last flex w-full min-w-0 gap-1 overflow-x-auto sm:order-none sm:w-auto">
                         {NAV_LINKS.map((link) => {
                             const active = pathname.startsWith(link.href);
                             return (
                                 <Link key={link.href} href={link.href}
                                     aria-current={active ? "page" : undefined}
-                                    className={`rounded-md px-3 py-1.5 text-sm ${active
+                                    className={`shrink-0 whitespace-nowrap rounded-md px-3 py-1.5 text-sm ${active
                                         ? "bg-emerald-50 font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
                                         : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"}`}>
                                     {link.label}
@@ -49,7 +49,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             );
                         })}
                     </nav>
-                    <div className="ml-auto flex items-center gap-3 text-sm">
+                    <div className="ml-auto flex shrink-0 items-center gap-3 text-sm">
                         <span className="hidden text-zinc-500 sm:inline">{user.fullName}</span>
                         <button onClick={handleLogout}
                             className="rounded-md border border-zinc-300 px-3 py-1.5 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">
