@@ -5,7 +5,8 @@ import type {
     TransactionRequest, TransferRequest, TransferResponse, UpdateAccountRequest,
 } from "@/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5249";
+// Empty by default: requests go to /api/... on this site and are forwarded to the API (see next.config.ts)
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 const TOKEN_KEY = "fintrack_token";
 
 // ---- Token storage ----
